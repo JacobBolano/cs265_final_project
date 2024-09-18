@@ -1,0 +1,67 @@
+# which benchmarks to run
+benchmarks = '../test/lvn/*.bril'
+# how to extract the performance metric from stderr
+extract = 'total_dyn_inst: (\d+)'
+
+[runs.baseline]
+pipeline = [
+  "bril2json",
+  "brili -p {args}",
+]
+
+[runs.dce]
+pipeline = [
+  "bril2json",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "brili -p {args}",
+]
+
+
+[runs.dce_cse]
+pipeline = [
+  "bril2json",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "python3 common_subexpression_elimination.py",
+  "brili -p {args}",
+]
+
+
+[runs.dce_cse_dce]
+pipeline = [
+  "bril2json",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "python3 common_subexpression_elimination.py",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "brili -p {args}",
+]
+
+
+[runs.dce_copy_cse_dce]
+pipeline = [
+  "bril2json",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "python3 copy_prop.py",
+  "python3 common_subexpression_elimination.py",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "brili -p {args}",
+]
+
+
+
+[runs.dce_copy_const_cse_dce]
+pipeline = [
+  "bril2json",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "python3 copy_prop.py",
+  "python3 constant_prop_fold.py",
+  "python3 global_trivial_dce.py",
+  "python3 local_dce.py",
+  "brili -p {args}",
+]

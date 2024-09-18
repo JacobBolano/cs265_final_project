@@ -1,0 +1,17 @@
+@main {
+  a: int = const 36;
+  b: int = const 47;
+  c: int = add a b;
+  print c;
+  print d;
+  jmp termination;
+
+.mylabel:
+  f: int = add a b;
+  d: int = add b a;
+  print f;
+  g: int = const 0;
+  h: int = mul f g;
+.termination:
+  print a;
+}

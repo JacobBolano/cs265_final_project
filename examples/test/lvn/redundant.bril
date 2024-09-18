@@ -1,4 +1,3 @@
-# (a + b) * (a + b)
 @main {
   a: int = const 4;
   b: int = const 2;

@@ -53,6 +53,7 @@ def print_blocks(bril):
     import briltxt
 
     func = bril['functions'][0]  # We only process one function.
+    print(bril['functions'])
     for block in form_blocks(func['instrs']):
         # Mark the block.
         leader = block[0]
@@ -63,7 +64,11 @@ def print_blocks(bril):
             print('anonymous block:')
 
         # Print the instructions.
+        print("test")
+        print(block)
+        print("test")
         for instr in block:
+            #print(instr)
             print('  {}'.format(briltxt.instr_to_string(instr)))
 
 
