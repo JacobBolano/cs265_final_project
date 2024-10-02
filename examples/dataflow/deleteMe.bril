@@ -1,0 +1,20 @@
+@main {
+.entry:
+  x: int = const 0;
+  z: int = id y;
+  jmp .header;
+
+.header:
+  c: bool = lt x a;
+  br c .loop .exit;
+
+.loop:
+  one: int = const 2;
+  one: int = const 1;
+  x: int = add x one;
+  y: int = add y one;
+  jmp .header;
+
+.exit:
+  print x;
+}

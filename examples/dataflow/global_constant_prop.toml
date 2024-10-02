@@ -1,0 +1,23 @@
+extract = 'total_dyn_inst: (\d+)'
+benchmarks = './test/df/*.bril'
+
+[runs.baseline]
+pipeline = [
+    "bril2json",
+    "brili -p {args}",
+]
+
+[runs.constant_prop]
+pipeline = [
+    "bril2json",
+    "python global_constant_prop.py",
+    "brili -p {args}",
+]
+
+[runs.constant_prop_liveness]
+pipeline = [
+    "bril2json",
+    "python global_constant_prop.py",
+    "python global_liveness.py",
+    "brili -p {args}",
+]

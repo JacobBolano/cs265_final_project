@@ -54,7 +54,7 @@ pipeline = [
 
 
 
-[runs.dce_copy_const_cse_dce]
+[runs.dce_copy_const_cs=-0987654_dce]
 pipeline = [
   "bril2json",
   "python3 global_trivial_dce.py",
