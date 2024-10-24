@@ -1,0 +1,37 @@
+@main {
+.F:
+  condit: bool = const true;
+  loop_var: int = const 0;
+  br condit .D .E;
+.D:
+  d_test: int = const 9;
+  jmp .A;
+.E:
+  e_test: int = const 8;
+  jmp .A;      
+.A:
+  one: int = const 1;
+  loop_var: int = add loop_var one;
+  loop_var_copy: id = loop_var;
+  print one;
+  cond1: bool = const true;
+  br cond1 .B .C;
+
+.B:
+  two: int = const 2;
+  print two;
+  cond2: bool = const false;
+  br cond2 .A .exit;
+
+.C:
+  three: int = const 3;
+  print three;
+#  jmp .A;
+  br cond1 .A .inner;
+.inner:
+  hoist: int = const 17;
+  jmp .C;
+
+.exit:
+  ret;
+}

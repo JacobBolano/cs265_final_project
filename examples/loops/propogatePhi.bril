@@ -1,0 +1,28 @@
+@main {
+.A:
+  x: int = const 1;
+  cond1: bool = const true;
+  br cond1 .B .C;
+
+.B:
+  cond3: bool = const true;
+  br cond3 .D .E;
+
+.D:
+  x: int = const 4;
+  jmp .F;
+
+.E:
+  x: int = const 5;
+  jmp .F;
+
+.F:
+  jmp .G;
+
+.C:
+  jmp .G;
+
+.G:
+  print x;
+  ret;
+}

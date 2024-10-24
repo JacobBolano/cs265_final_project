@@ -1,0 +1,40 @@
+#benchmarks = '../benchmarks/*/*.bril'
+benchmarks = '../benchmarks/core/*.bril'
+extract = 'total_dyn_inst: (\d+)'
+
+
+[runs.ssa]
+pipeline = [
+    "bril2json",
+    "python personal_ssa.py",
+    "brili -p {args}",
+]
+
+[runs.ssa_lpnorm]
+pipeline = [
+    "bril2json",
+    "python personal_ssa.py",
+    "python loop_normalization.py",
+    "brili -p {args}",
+]
+
+[runs.ssa_lpnorm_licm]
+pipeline = [
+    "bril2json",
+    "python personal_ssa.py",
+    "python loop_normalization.py",
+    "python LICM.py",
+    "brili -p {args}",
+]
+
+
+[runs.ssa_lpnorm_licm_dce]
+pipeline = [
+    "bril2json",
+    "python personal_ssa.py",
+    "python loop_normalization.py",
+    "python LICM.py",
+    "python global_constant_prop.py",
+    "python global_liveness.py",
+    "brili -p {args}",
+]

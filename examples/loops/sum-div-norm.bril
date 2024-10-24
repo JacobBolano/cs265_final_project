@@ -1,0 +1,77 @@
+@main(n: int) {
+.entry1:
+  jmp .b1;
+.b1:
+  i_0: int = const 0;
+  res_0: int = const 0;
+  one_0: int = const 1;
+  non_0: int = const -1;
+  zer_0: int = const 0;
+  nlz_0: bool = lt n zer_0;
+  print i_0;
+  br nlz_0 .neg .begin_preheader;
+.neg:
+  n_1: int = mul n non_0;
+  print i_0;
+  jmp .begin_preheader;
+.begin:
+  deqi_0: bool = phi deqi_0_L deqi_0_pre .begin_latch .begin_preheader;
+  d_0: int = phi d_0_L d_0_pre .begin_latch .begin_preheader;
+  eqz_0: bool = phi eqz_0_L eqz_0_pre .begin_latch .begin_preheader;
+  m_0: int = phi m_0_L m_0_pre .begin_latch .begin_preheader;
+  sqgt_0: bool = phi sqgt_0_L sqgt_0_pre .begin_latch .begin_preheader;
+  isq_0: int = phi isq_0_L isq_0_pre .begin_latch .begin_preheader;
+  n_2: int = phi n_2_L n_2_pre .begin_latch .begin_preheader;
+  res_1: int = phi res_1_L res_1_pre .begin_latch .begin_preheader;
+  i_1: int = phi i_1_L i_1_pre .begin_latch .begin_preheader;
+  i_2: int = add i_1 one_0;
+  isq_1: int = mul i_2 i_2;
+  sqgt_1: bool = gt isq_1 n_2;
+  br sqgt_1 .end .check;
+.check:
+  m_1: int = call @mod n_2 i_2;
+  eqz_1: bool = eq m_1 zer_0;
+  br eqz_1 .body .begin_latch;
+.body:
+  print i_2;
+  res_2: int = add res_1 i_2;
+  d_1: int = div n_2 i_2;
+  deqi_1: bool = eq d_1 i_2;
+  br deqi_1 .begin_latch .then;
+.then:
+  print d_1;
+  res_3: int = add res_2 d_1;
+  jmp .begin_latch;
+.end:
+  print res_1;
+  ret;
+.begin_latch:
+  jmp .begin;
+  deqi_0_L: bool = phi deqi_0 deqi_1 deqi_1 .check .body .then;
+  d_0_L: int = phi d_0 d_1 d_1 .check .body .then;
+  eqz_0_L: bool = phi eqz_1 eqz_1 eqz_1 .check .body .then;
+  m_0_L: int = phi m_1 m_1 m_1 .check .body .then;
+  sqgt_0_L: bool = phi sqgt_1 sqgt_1 sqgt_1 .check .body .then;
+  isq_0_L: int = phi isq_1 isq_1 isq_1 .check .body .then;
+  n_2_L: int = phi n_2 n_2 n_2 .check .body .then;
+  res_1_L: int = phi res_1 res_2 res_3 .check .body .then;
+  i_1_L: int = phi i_2 i_2 i_2 .check .body .then;
+.begin_preheader:
+  jmp .begin;
+  deqi_0_pre: bool = phi __undefined __undefined .b1 .neg;
+  d_0_pre: int = phi __undefined __undefined .b1 .neg;
+  eqz_0_pre: bool = phi __undefined __undefined .b1 .neg;
+  m_0_pre: int = phi __undefined __undefined .b1 .neg;
+  sqgt_0_pre: bool = phi __undefined __undefined .b1 .neg;
+  isq_0_pre: int = phi __undefined __undefined .b1 .neg;
+  n_2_pre: int = phi n n_1 .b1 .neg;
+  res_1_pre: int = phi res_0 res_0 .b1 .neg;
+  i_1_pre: int = phi i_0 i_0 .b1 .neg;
+}
+@mod(dividend: int, divisor: int): int {
+.b1:
+  quot_0: int = div dividend divisor;
+  prod_0: int = mul divisor quot_0;
+  diff_0: int = sub dividend prod_0;
+  ret diff_0;
+}
