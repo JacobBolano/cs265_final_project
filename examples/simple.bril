@@ -1,18 +1,15 @@
 @main {
-.A:
-  x: int = const 1;
-  cond1: bool = const true;
-  br cond1 .B .C;
-
-.B:
-  one: int = const 1;
-  x: int = add x one;
-  br cond1 .A .D;
-
-.C:
- print x;
- br cond1 .A .D;
-
-.D:
+  size: int = const 512;
+  arr: ptr<int> = alloc size;
+  
+  store arr size;
+.tester:
+  a: ptr<int> = id arr;
+  val: int = load a;
+  qwerty: ptr<int> = alloc size;
+  store qwerty size;
+  free qwerty;
+  free arr;
   ret;
+
 }

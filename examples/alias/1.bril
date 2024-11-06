@@ -1,0 +1,13 @@
+@main() {
+size: int = const 1;
+arr: ptr<int> = alloc size;
+five: int = const 5;
+ten: int = const 10;
+seven: int = const 7;
+store arr ten;
+arr2: ptr<int> = alloc size;
+store arr seven;
+arr3: ptr<int> = id arr;
+store arr ten;
+print arr;
+}

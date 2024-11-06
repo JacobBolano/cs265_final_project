@@ -1,0 +1,24 @@
+extract = 'total_dyn_inst: (\d+)'
+#benchmarks = '../test/*/*/*.bril'
+benchmarks = '../benchmarks/*/*.bril'
+
+
+[runs.original]
+pipeline = [
+    "bril2json",
+    "brili -p {args}",
+]
+
+[runs.baseline]
+pipeline = [
+    "bril2json",
+    "python baseline.py",
+    "brili -p {args}",
+]
+
+[runs.constant_prop]
+pipeline = [
+    "bril2json",
+    "python alias_analysis.py",
+    "brili -p {args}",
+]

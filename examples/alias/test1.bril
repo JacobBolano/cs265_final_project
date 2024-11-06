@@ -1,0 +1,27 @@
+
+@main(ptr1: ptr<int>) {
+    size: int = const 1;
+    mem1: ptr<int> = alloc size;
+    mem2: ptr<int> = alloc size;
+    store mem1 size;
+    test: int = load mem1;
+    rand: int = const 2;
+    store mem2 rand;
+    store mem1 size;
+    cond: bool = const true;
+    store mem2 size;
+    br cond .A .B;
+.A:
+    test2: int = load mem2;
+    jmp .end;
+.B:
+    ptr2: ptr<int> = id ptr1;
+    jmp .end;
+
+.end:
+    free mem1;
+    free mem2;
+    store ptr2 rand;
+    ret;
+}
+
