@@ -12,7 +12,7 @@
 .A:
   one: int = const 1;
   loop_var: int = add loop_var one;
-  loop_var_copy: id = loop_var;
+  loop_var_copy: int = id loop_var;
   print one;
   cond1: bool = const true;
   br cond1 .B .C;
