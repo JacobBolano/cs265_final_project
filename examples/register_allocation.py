@@ -175,19 +175,41 @@ def find_phis(block_map_result):
 class Interval:
     def __init__(self):
         self.ranges = []  # List of (start_instruction, end_instruction)
-        self.uses = set()
         self.start = None  # First point where the variable is live
+        self.register = None
 
     def add_range(self, start, end):
-        self.ranges.append((start, end))
-        self.uses.add(end)
+        self.ranges.append((start, end))  # Add the new range
+        self.ranges.sort(key=lambda x: x[0])  # Sort ranges by start
 
-    def add_uses(self, new_uses):
-        self.uses.update(new_uses)
+        # Merge overlapping ranges
+        merged_ranges = []
+        current_start, current_end = self.ranges[0]
+        for s, e in self.ranges[1:]:
+            if s <= current_end:  # Overlapping
+                current_end = max(current_end, e)
+            else:
+                merged_ranges.append((current_start, current_end))
+                current_start, current_end = s, e
+        merged_ranges.append((current_start, current_end))  # Add the last range
+
+        self.ranges = merged_ranges
+
+    # TODO: splitting function for interval
+    
 
     def set_from(self, start):
         if self.start is None:
             self.start = start
+            # we now need to cut the interval that intersects with start
+            for i, range in enumerate(self.ranges):
+                start_range, end_range = range
+                # we know there is an intersection if start is between start and end of this range
+                if (start_range <= start <= end_range):
+                    # update the index to be (global) start, end_range
+                    cut_range = (start, end_range)
+                    self.ranges[i] = cut_range
+                    break # we found where to cut
 
 # finds variable related to block label for a phi
 def find_phi_label_arg(phi, target_block):
@@ -236,6 +258,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
             if operand not in intervals:
                 intervals[operand] = Interval()
             intervals[operand].add_range(block_start_end_map[block][0], block_start_end_map[block][1])
+            logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
         
         # Process operations in reverse - go through each instruction and make sure its an operation
         for i in range(len(instructions) - 1, -1, -1):
@@ -256,6 +279,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                     if input not in intervals:
                         intervals[input] = Interval()
                     intervals[input].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
+                    logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
                     live.add(input)
         
         # Handle phi outputs
@@ -270,15 +294,10 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                 if operand not in intervals:
                     intervals[operand] = Interval()
                 intervals[operand].add_range(block_start_end_map[block][0], block_start_end_map[loop_end][1])
+                logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
         
         # Save liveIn for the block
         live_in[block] = live
-    
-    # add all uses to intervals
-    for op in intervals:
-        op_interval = intervals[op]
-        if op in var_to_use_map:
-            op_interval.add_uses(var_to_use_map[op])
 
     return intervals, live_in
 
@@ -419,31 +438,34 @@ if __name__ == "__main__":
 
         phi_map = find_phis(block_map_result)
 
-
         # label instructions to their index/id
         instr_to_index = {} # maps tuple (block, instruction_block_index) to overall index
         block_start_end_map = {} # maps block to tuple (index of starting instruction, index of ending instruction)
-        index_of_instr = 1
+        index_of_instr = 2
         for block in block_map_result:
             block_start = index_of_instr
+            # go through each instruction in our map
             for i in range(len(block_map_result[block])):
                 instr_to_index[(block, i)] = index_of_instr
-                index_of_instr += 1
-            block_end = index_of_instr - 1
+                if i + 1 < len(block_map_result[block]) and "op" in block_map_result[block][i+1] and block_map_result[block][i+1].get('op') == 'phi':
+                    # we dont change the index of phis if the next instruciton is also a phi instruction
+                    continue
+                else:
+                    index_of_instr += 2
+            block_end = index_of_instr - 2
             block_start_end_map[block] = (block_start, block_end)
-        
+
         var_to_use_map = find_uses(block_map_result, instr_to_index)
 
-        intervals, live_in = build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map)
+        intervals, live_in = build_intervals(reordered_postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map)
 
         #print(reorder_postorder(postorder, filtered_nested_loops))
-        logging.debug(f'intervals: {intervals}')
-        logging.debug(f'live in: {live_in}')
+        # logging.debug(f'intervals: {intervals}')
+        # logging.debug(f'live in: {live_in}')
 
         for interval in intervals:
             logging.debug(f'interval: {interval}')
             logging.debug(f'{intervals[interval].ranges}')
-            logging.debug(f'{intervals[interval].uses}')
             logging.debug(f'{intervals[interval].start}')
 
 

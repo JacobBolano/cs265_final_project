@@ -1,0 +1,15 @@
+DEBUG:root:interval: arr_0
+DEBUG:root:[(4, 8), (10, 20)]
+DEBUG:root:4
+DEBUG:root:interval: qwerty_0
+DEBUG:root:[(14, 18)]
+DEBUG:root:14
+DEBUG:root:interval: size_0
+DEBUG:root:[(2, 8), (10, 16)]
+DEBUG:root:2
+DEBUG:root:interval: val_0
+DEBUG:root:[]
+DEBUG:root:12
+DEBUG:root:interval: a_0
+DEBUG:root:[(10, 12)]
+DEBUG:root:10
