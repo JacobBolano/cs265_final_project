@@ -173,10 +173,11 @@ def find_phis(block_map_result):
 
 # defines interval class
 class Interval:
-    def __init__(self):
+    def __init__(self, id):
         self.ranges = []  # List of (start_instruction, end_instruction)
         self.start = None  # First point where the variable is live
         self.register = None
+        self.interval_id = id
 
     def add_range(self, start, end):
         self.ranges.append((start, end))  # Add the new range
@@ -193,10 +194,7 @@ class Interval:
                 current_start, current_end = s, e
         merged_ranges.append((current_start, current_end))  # Add the last range
 
-        self.ranges = merged_ranges
-
-    # TODO: splitting function for interval
-    
+        self.ranges = merged_ranges    
 
     def set_from(self, start):
         if self.start is None:
@@ -210,6 +208,40 @@ class Interval:
                     cut_range = (start, end_range)
                     self.ranges[i] = cut_range
                     break # we found where to cut
+
+# function to split current interval into a new one for the same object
+def split_interval(target_operand, old_interval, old_interval_id, free_until_pos, intervals):
+
+    # first we need to create our new interval class
+    new_interval = Interval(len(intervals[target_operand]) + 1) # creates unique id
+
+    # we copy over the ranges that include or come after free_until_pos
+    # we also save which ranges we should remove
+    ranges_to_remove = []
+    for i, range in enumerate(old_interval.ranges):
+        start, end = range
+        if free_until_pos < start < end: # in this case the range does not intersect with free until pos
+            new_interval.add_range(start, end)
+            ranges_to_remove.append(range)
+        elif start < free_until_pos < end: #in this case there is an intersection
+            new_interval.add_range(free_until_pos, end)
+            old_interval.ranges[i] = (start, free_until_pos)
+
+    # we set the Start of the interval, cutting the first range copied over
+    new_interval.set_from(free_until_pos)
+
+    # we fix the previous interval to no longer include the ranges that got added over
+    for range in ranges_to_remove:
+        old_interval.remove(range)
+    
+    # add the new range to the map and edit the old range
+    for i, interval in enumerate(intervals[target_operand]):
+        if interval.interval_id == old_interval_id:
+            intervals[target_operand][i] = old_interval
+            break
+    intervals[target_operand].append(new_interval)
+    return intervals
+
 
 # finds variable related to block label for a phi
 def find_phi_label_arg(phi, target_block):
@@ -237,7 +269,7 @@ def find_uses(block_map_result, instr_to_index):
 
 # builds intervals based on algorithm in paper
 def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map):
-    intervals = {} # maps operands to intervals
+    intervals = {} # maps operands to interval classes
     live_in = {} # maps blocks to sets of operands live at block entry
 
     for block in reversed(postorder):
@@ -256,8 +288,8 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
         # Initialize intervals for live variables
         for operand in live:
             if operand not in intervals:
-                intervals[operand] = Interval()
-            intervals[operand].add_range(block_start_end_map[block][0], block_start_end_map[block][1])
+                intervals[operand] = [Interval()]
+            intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[block][1])
             logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
         
         # Process operations in reverse - go through each instruction and make sure its an operation
@@ -268,17 +300,17 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
             if "dest" in instruction:
                 output = instruction["dest"]
                 if output not in intervals:
-                    intervals[output] = Interval()
+                    intervals[output] = [Interval(1)]
 
-                intervals[output].set_from(instr_to_index[(block, i)])
+                intervals[output][0].set_from(instr_to_index[(block, i)])
                 live.discard(output)
 
             # Handle Inputs
             if "args" in instruction:
                 for input in instruction["args"]:
                     if input not in intervals:
-                        intervals[input] = Interval()
-                    intervals[input].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
+                        intervals[input] = [Interval(1)]
+                    intervals[input][0].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
                     logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
                     live.add(input)
         
@@ -292,8 +324,8 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
             loop_end = header_to_latch_map[block] # need a function to get loop latch/exit
             for operand in live:
                 if operand not in intervals:
-                    intervals[operand] = Interval()
-                intervals[operand].add_range(block_start_end_map[block][0], block_start_end_map[loop_end][1])
+                    intervals[operand] = [Interval(1)]
+                intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[loop_end][1])
                 logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
         
         # Save liveIn for the block
@@ -463,17 +495,29 @@ if __name__ == "__main__":
         # logging.debug(f'intervals: {intervals}')
         # logging.debug(f'live in: {live_in}')
 
-        for interval in intervals:
-            logging.debug(f'interval: {interval}')
-            logging.debug(f'{intervals[interval].ranges}')
-            logging.debug(f'{intervals[interval].start}')
+        for op in intervals:
+            for interval in intervals[op]:
+                logging.debug(f'operand: {op}')
+                logging.debug(f'interval id {interval.interval_id}')
+                logging.debug(f'{interval.ranges}')
+                logging.debug(f'{interval.start}')
 
 
 
-        fn["instrs"] = reassemble(block_map_result)
         
 
 
+        # test splitting interval
+        intervals = split_interval('arr_0', intervals['arr_0'][0], 1, 12, intervals)
+        logging.debug("post split interval")
+        for op in intervals:
+            for interval in intervals[op]:
+                logging.debug(f'operand: {op}')
+                logging.debug(f'interval id {interval.interval_id}')
+                logging.debug(f'{interval.ranges}')
+                logging.debug(f'{interval.start}')
+
+        fn["instrs"] = reassemble(block_map_result)
 
 
     # UNCOMMENT LATER
