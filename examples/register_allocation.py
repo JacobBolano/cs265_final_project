@@ -179,6 +179,7 @@ class Interval:
         self.register = None
         self.interval_id = id
         self.uses = set()
+        self.end = None
 
     def add_use(self, use_time):
         self.uses.add(use_time)
@@ -197,7 +198,7 @@ class Interval:
                 merged_ranges.append((current_start, current_end))
                 current_start, current_end = s, e
         merged_ranges.append((current_start, current_end))  # Add the last range
-
+        self.end = merged_ranges[-1][1]
         self.ranges = merged_ranges    
 
     def set_from(self, start):
@@ -248,8 +249,7 @@ def earliestIntersection(source_interval, target_interval):
     return earliest 
 
 # function to split current interval into a new one for the same object
-# TODO split the uses as well
-def split_interval(target_operand, old_interval, old_interval_id, free_until_pos, intervals):
+def split_interval(target_operand, old_interval, free_until_pos, intervals):
 
     # first we need to create our new interval class
     new_interval = Interval(len(intervals[target_operand]) + 1) # creates unique id
@@ -273,6 +273,9 @@ def split_interval(target_operand, old_interval, old_interval_id, free_until_pos
     for range in ranges_to_remove:
         old_interval.remove(range)
 
+    # update the end of our old interval (new interval updated dynamically)
+    old_interval.end = sorted(old_interval.ranges)[-1][1]
+
     # we fix the uses that come after the time
     for use in old_interval.uses:
         if use >= free_until_pos:
@@ -282,7 +285,7 @@ def split_interval(target_operand, old_interval, old_interval_id, free_until_pos
     
     # add the new interval to the map and edit the old interval
     for i, interval in enumerate(intervals[target_operand]):
-        if interval.interval_id == old_interval_id:
+        if interval.interval_id == old_interval.interval_id:
             intervals[target_operand][i] = old_interval
             break
     intervals[target_operand].append(new_interval)
@@ -546,8 +549,9 @@ if __name__ == "__main__":
             for interval in intervals[op]:
                 logging.debug(f'operand: {op}')
                 logging.debug(f'interval id {interval.interval_id}')
-                logging.debug(f'{interval.ranges}')
-                logging.debug(f'{interval.start}')
+                logging.debug(f'ranges: {interval.ranges}')
+                logging.debug(f'start: {interval.start}')
+                logging.debug(f'end: {interval.end}')
 
 
 
@@ -555,14 +559,15 @@ if __name__ == "__main__":
 
 
         # test splitting interval
-        intervals = split_interval('arr_0', intervals['arr_0'][0], 1, 12, intervals)
+        intervals, new_interval = split_interval('arr_0', intervals['arr_0'][0], 12, intervals)
         logging.debug("post split interval")
         for op in intervals:
             for interval in intervals[op]:
                 logging.debug(f'operand: {op}')
                 logging.debug(f'interval id {interval.interval_id}')
-                logging.debug(f'{interval.ranges}')
-                logging.debug(f'{interval.start}')
+                logging.debug(f'ranges: {interval.ranges}')
+                logging.debug(f'start: {interval.start}')
+                logging.debug(f'end: {interval.end}')
 
         fn["instrs"] = reassemble(block_map_result)
 
