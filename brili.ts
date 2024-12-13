@@ -322,6 +322,9 @@ type State = {
 
   // For speculation: the state at the point where speculation began.
   specparent: State | null,
+
+  // For tracking the number of stack spills that occur
+  numStackSpills: bigint
 }
 
 /**
@@ -366,9 +369,11 @@ function evalCall(instr: bril.Operation, state: State): Action {
     lastlabel: null,
     curlabel: null,
     specparent: null,  // Speculation not allowed.
+    numStackSpills: state.numStackSpills,
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
+  state.numStackSpills = newState.numStackSpills;
 
   // Dynamically check the function's return value and type.
   if (!('dest' in instr)) {  // `instr` is an `EffectOperation`.
@@ -451,6 +456,10 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
   case "id": {
     let val = getArgument(instr, state.env, 0);
+    // console.log("instr: ", instr, " state.env: ",state.env,"  argPos: ", 0, " val: ", val);
+    if (instr.dest.includes("STACK")) {
+      state.numStackSpills += BigInt(1);
+    }
     state.env.set(instr.dest, val);
     return NEXT;
   }
@@ -777,6 +786,7 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
 function evalFunc(func: bril.Function, state: State): Value | null {
   for (let i = 0; i < func.instrs.length; ++i) {
+    
     let line = func.instrs[i];
     if ('op' in line) {
       // Run an instruction.
@@ -946,6 +956,7 @@ function evalProg(prog: bril.Program) {
     lastlabel: null,
     curlabel: null,
     specparent: null,
+    numStackSpills: BigInt(0),
   }
   evalFunc(main, state);
 
@@ -955,6 +966,7 @@ function evalProg(prog: bril.Program) {
 
   if (profiling) {
     console.error(`total_dyn_inst: ${state.icount}`);
+    console.error(`total_dyn_stack_spills: ${state.numStackSpills}`);
   }
 
 }

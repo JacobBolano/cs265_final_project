@@ -569,6 +569,128 @@ if __name__ == "__main__":
                 logging.debug(f'start: {interval.start}')
                 logging.debug(f'end: {interval.end}')
 
+        
+        ################################################
+        #     WRITING CODE FOR THE LINEAR SCAN         #
+        # ASSUMPTIONS:
+        # 1. We have a list of lifetime intervals of the format [( <Interval Object>, associated_variable/register), ...]
+        #       sorted by start time
+        lifetimeIntervals = [(val, key) for (key, val) in intervals.items()]
+        # 2. we have a dictionary of uses where the the variable/register is the key and the value is a list of uses sorted in increasing order [line1, line2, ...]
+        var_to_use_map = {}
+        # 3. we have the proper block order from before. This should be reordered_postorder (from lifetime ranges branch)
+        reordered_postorder = reordered_postorder
+        #
+        # 4. Number of physical registers We assume that we have at least as many registers as the maximum arguments in an instruction (ideally this is 3 or 1+maxnum fo phi instructions)
+        numRegisters= args.numRegisters
+        # Between functions, we do not care, all registers to stack both in here and in base case
+        # ALL variables can be spilled (no fixed intervals)
+        ################################################
+
+        # state sets. All contain tuples for the format ( <Interval Object>, associated_variable/register )
+        unhandled = sorted(lifetimeIntervals, key=lambda x: x[0].start) 
+        active = set() # intervals that are active at the current position (start<= curent position <= end)
+        inactive = set() # intervals that are inactive at the current position (start<= curent position <= end)
+        handled = set() # intervals that are handled at the current position
+
+
+        # registersInUse = {} # dictionary that maps variable/virtual-register to physical-registers if the variable is in a register
+
+        
+        unhandled
+        while unhandled:
+            current, curVariable = unhandled.pop(0)
+            position = current.start
+
+            #check for intervals in active that are handled or inactive
+            for it, it_var in active:
+                if it.end < position:
+                    handled.add((it, it_var))
+                    active.remove( (it, it_var) )
+                elif not it.covers(position):
+                    inactive.add((it, it_var))
+                    active.remove( (it, it_var) )
+            
+            # check for intervals in inactive that are handled or active
+            for it, it_var in inactive:
+                if it.end < position:
+                    handled.add((it, it_var))
+                    inactive.remove( (it, it_var) )
+                elif it.covers(position):
+                    active.add((it, it_var))
+                    inactive.remove( (it, it_var) )
+
+            # find a register for current (TryAllocateFreeReg)
+            freeFailed = False    
+            freeUntilPos = [float('inf')]*numRegisters # set freeUntilPos of all physical registers to maxInt. The physical register (int) is the index.
+            for it, it_var in active:
+                freeUntilPos[it.register] = 0
+            for it, it_var in inactive:
+                # if it.containsPosition(position):#TODo Current intersects inactive
+                freeUntilPos[it.register] = min(freeUntilPos[it.register],      it.earliestIntersection(current, it) )  #TODo earliest intersection with current (after position, but should be handled without check)
+            candidate_register = freeUntilPos.index(max(freeUntilPos)) # register with highest freeUntilPos
+            if freeUntilPos[candidate_register] == 0:
+                # no register is available without spilling
+                freeFailed = True
+            elif current.end <= freeUntilPos[candidate_register]:
+                # register available for the whole interval
+                current.register = candidate_register
+            else:
+                # register available for teh first part of the interval
+                current.register = candidate_register
+                split_child = current.generateChild(freeUntilPos[candidate_register])
+                split_child_index = bisect.bisect_left(unhandled, split_child, key = lambda x: x[0].start)
+                unhandled.insert(split_child_index, split_child)
+
+
+
+
+
+
+
+            #if free register allocation failed
+            if freeFailed:
+                nextUsePos = [float('inf')]*numRegisters # set nextUsePos of all physical registers to maxInt. The physical register (int) is the index.
+                for it, it_var in active:
+                    nextUsePos[it.register] = min(it.nextUseAfter(current.start), nextUsePos[it.register])
+                for it, it_var in inactive:
+                    nextUsePos[it.register] = min(it.nextUseAfter(current.start), nextUsePos[it.register])
+                
+                candidate_register = nextUsePos.index(max(nextUsePos)) # register with highest nextUsePos
+            
+            
+            if current.firstUse() > nextUsePos[candidate_register]:
+                # all other intervals are used before current is used
+                # so it is best to spill current itself
+
+                # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
+                split_child = current.generateChild(current.firstUse())
+                split_child_index = bisect.bisect_left(unhandled, split_child, key = lambda x: x[0].start)
+                unhandled.insert(split_child_index, split_child)
+
+            else:
+                # spill intervals that currently block reg
+                for it, it_var in active:
+                    split_active = it.generateChild(current.firstUse())
+                    split_active_index = bisect.bisect_left(unhandled, split_active, key = lambda x: x[0].start)
+                    unhandled.insert(split_active_index, split_active)
+                    # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
+                    logging.debug("SPILL to STACK")
+                
+                for it, it_var in inactive:
+                    split_inactive = it.generateChild(current.firstUse())
+                    split_inactive_index = bisect.bisect_left(unhandled, split_inactive, key = lambda x: x[0].start)
+                    unhandled.insert(split_inactive_index, split_active)
+                    # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
+                    logging.debug("SPILL to STACK")
+
+            # Since there are no fixed intervals for any registers, we do not further process
+
+        
+        
+        
+        
+        
         fn["instrs"] = reassemble(block_map_result)
 
 
