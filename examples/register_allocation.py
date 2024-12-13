@@ -2,7 +2,8 @@ import json
 import sys
 from collections import defaultdict, OrderedDict
 import logging
-
+import bisect
+import argparse # for getting register count info
 from cfg import block_map, successors, add_terminators, add_entry, reassemble, edges
 from form_blocks import form_blocks
 
