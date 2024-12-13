@@ -178,6 +178,10 @@ class Interval:
         self.start = None  # First point where the variable is live
         self.register = None
         self.interval_id = id
+        self.uses = set()
+
+    def add_use(self, use_time):
+        self.uses.add(use_time)
 
     def add_range(self, start, end):
         self.ranges.append((start, end))  # Add the new range
@@ -209,7 +213,42 @@ class Interval:
                     self.ranges[i] = cut_range
                     break # we found where to cut
 
+    def covers(self, time): # check if target time is within any range
+        for range in self.ranges:
+            start, end = range
+            if start <= time <= end:
+                return True
+        return False
+
+    def nextUseAfter(self, target_time): # find the soonest use after target time for this interval
+        sorted(self.uses)
+        for use in self.uses:
+            if target_time <= use:
+                return use
+        return None
+
+    def firstUse(self): # find the first use
+        sorted(self.uses)
+        return self.uses[0]
+
+
+def earliestIntersection(source_interval, target_interval):
+    # we want to find in the source interval where the target interval first intersects
+    earliest = float("inf")
+    for range in source_interval.ranges:
+        source_start, source_end = range
+
+        for t_range in source_interval.ranges:
+            target_start, target_end = t_range
+
+            if source_start <= target_start <= source_end: # if our start is within source
+                earliest = min(earliest, target_start)
+            elif source_start <= target_end <= source_end:
+                earliest = min(earliest, target_end)
+    return earliest 
+
 # function to split current interval into a new one for the same object
+# TODO split the uses as well
 def split_interval(target_operand, old_interval, old_interval_id, free_until_pos, intervals):
 
     # first we need to create our new interval class
@@ -233,14 +272,21 @@ def split_interval(target_operand, old_interval, old_interval_id, free_until_pos
     # we fix the previous interval to no longer include the ranges that got added over
     for range in ranges_to_remove:
         old_interval.remove(range)
+
+    # we fix the uses that come after the time
+    for use in old_interval.uses:
+        if use >= free_until_pos:
+            new_interval.add_use(use)
+    for use in new_interval.uses:
+        old_interval.uses.remove(use)
     
-    # add the new range to the map and edit the old range
+    # add the new interval to the map and edit the old interval
     for i, interval in enumerate(intervals[target_operand]):
         if interval.interval_id == old_interval_id:
             intervals[target_operand][i] = old_interval
             break
     intervals[target_operand].append(new_interval)
-    return intervals
+    return intervals, new_interval
 
 
 # finds variable related to block label for a phi
@@ -290,7 +336,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
             if operand not in intervals:
                 intervals[operand] = [Interval()]
             intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[block][1])
-            logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
+            # logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
         
         # Process operations in reverse - go through each instruction and make sure its an operation
         for i in range(len(instructions) - 1, -1, -1):
@@ -311,7 +357,8 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                     if input not in intervals:
                         intervals[input] = [Interval(1)]
                     intervals[input][0].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
-                    logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
+                    intervals[input][0].add_use(instr_to_index[(block, i)])
+                    # logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
                     live.add(input)
         
         # Handle phi outputs
@@ -326,7 +373,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                 if operand not in intervals:
                     intervals[operand] = [Interval(1)]
                 intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[loop_end][1])
-                logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
+                # logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
         
         # Save liveIn for the block
         live_in[block] = live
