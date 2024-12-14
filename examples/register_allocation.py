@@ -11,6 +11,15 @@ from form_blocks import form_blocks
 
 logging.basicConfig(filename='debug.log', level=logging.DEBUG)
 
+def validate_number(value):
+    ''' 
+    function to check if the passed in argument (number of registers) is >= 2
+    '''
+    number = int(value)
+    if number < 2:
+        raise argparse.ArgumentTypeError("The number must be greater than 2.")
+    return number
+
 def def_blocks(blocks):
     """Get a map from variable names to defining blocks.
     """
@@ -290,7 +299,7 @@ def split_interval(target_operand, old_interval, free_until_pos, intervals):
             intervals[target_operand][i] = old_interval
             break
     intervals[target_operand].append(new_interval)
-    return intervals, new_interval
+    return intervals, new_interval, old_interval
 
 
 # finds variable related to block label for a phi
@@ -386,7 +395,12 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
 
 if __name__ == "__main__":
     prog = json.load(sys.stdin)
-
+    
+    
+    # gather the number for registers from the cmdline
+    parser = argparse.ArgumentParser(description="Process an integer argument greater than 2.")
+    parser.add_argument("numRegisters", type=validate_number, help="An integer number greater than 2")
+    args = parser.parse_args()
 
     # enter each (main) function
     for fn in prog["functions"]:
@@ -586,6 +600,9 @@ if __name__ == "__main__":
         numRegisters= args.numRegisters
         # Between functions, we do not care, all registers to stack both in here and in base case
         # ALL variables can be spilled (no fixed intervals)
+
+        # 5. We will be adding BRIL instructions to signify the stack spills. We will store these in a map from location to a list of variables that are spilled there
+        spills = defaultdict(list)
         ################################################
 
         # state sets. All contain tuples for the format ( <Interval Object>, associated_variable/register )
@@ -595,10 +612,6 @@ if __name__ == "__main__":
         handled = set() # intervals that are handled at the current position
 
 
-        # registersInUse = {} # dictionary that maps variable/virtual-register to physical-registers if the variable is in a register
-
-        
-        unhandled
         while unhandled:
             current, curVariable = unhandled.pop(0)
             position = current.start
@@ -621,6 +634,12 @@ if __name__ == "__main__":
                     active.add((it, it_var))
                     inactive.remove( (it, it_var) )
 
+
+
+            currentWasAllocated = False
+            ######################
+            # TryAllocateFreeReg #
+            ######################
             # find a register for current (TryAllocateFreeReg)
             freeFailed = False    
             freeUntilPos = [float('inf')]*numRegisters # set freeUntilPos of all physical registers to maxInt. The physical register (int) is the index.
@@ -628,7 +647,7 @@ if __name__ == "__main__":
                 freeUntilPos[it.register] = 0
             for it, it_var in inactive:
                 # if it.containsPosition(position):#TODo Current intersects inactive
-                freeUntilPos[it.register] = min(freeUntilPos[it.register],      it.earliestIntersection(current, it) )  #TODo earliest intersection with current (after position, but should be handled without check)
+                freeUntilPos[it.register] = min(freeUntilPos[it.register],      earliestIntersection(current, it) )  #TODo earliest intersection with current (after position, but should be handled without check)
             candidate_register = freeUntilPos.index(max(freeUntilPos)) # register with highest freeUntilPos
             if freeUntilPos[candidate_register] == 0:
                 # no register is available without spilling
@@ -636,19 +655,25 @@ if __name__ == "__main__":
             elif current.end <= freeUntilPos[candidate_register]:
                 # register available for the whole interval
                 current.register = candidate_register
+                currentWasAllocated = True
             else:
+                               
+                # def split_interval(target_operand, old_interval, free_until_pos, intervals):
+                # return intervals, new_interval, old_interval
+                intervals, new_interval, current = split_interval( curVariable, current, freeUntilPos[candidate_register], intervals)
+                
                 # register available for teh first part of the interval
                 current.register = candidate_register
-                split_child = current.generateChild(freeUntilPos[candidate_register])
-                split_child_index = bisect.bisect_left(unhandled, split_child, key = lambda x: x[0].start)
-                unhandled.insert(split_child_index, split_child)
+                currentWasAllocated = True
+
+                # split_child = current.generateChild(freeUntilPos[candidate_register])
+                split_child_index = bisect.bisect_left(unhandled, new_interval, key = lambda x: x[0].start)
+                unhandled.insert(split_child_index, new_interval)
 
 
-
-
-
-
-
+            ######################
+            # AllocateBlockedReg #
+            ######################
             #if free register allocation failed
             if freeFailed:
                 nextUsePos = [float('inf')]*numRegisters # set nextUsePos of all physical registers to maxInt. The physical register (int) is the index.
@@ -659,35 +684,61 @@ if __name__ == "__main__":
                 
                 candidate_register = nextUsePos.index(max(nextUsePos)) # register with highest nextUsePos
             
-            
-            if current.firstUse() > nextUsePos[candidate_register]:
-                # all other intervals are used before current is used
-                # so it is best to spill current itself
+                current_first_use = current.firstUse()
+                if current_first_use > nextUsePos[candidate_register]:
+                    # all other intervals are used before current is used
+                    # so it is best to spill current itself
 
-                # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
-                split_child = current.generateChild(current.firstUse())
-                split_child_index = bisect.bisect_left(unhandled, split_child, key = lambda x: x[0].start)
-                unhandled.insert(split_child_index, split_child)
+                    # split_child = current.generateChild(current.firstUse())
+                    intervals, new_interval, current = split_interval( curVariable, current, current_first_use, intervals)
 
-            else:
-                # spill intervals that currently block reg
-                for it, it_var in active:
-                    split_active = it.generateChild(current.firstUse())
-                    split_active_index = bisect.bisect_left(unhandled, split_active, key = lambda x: x[0].start)
-                    unhandled.insert(split_active_index, split_active)
+                    split_child_index = bisect.bisect_left(unhandled, new_interval, key = lambda x: x[0].start)
+                    unhandled.insert(split_child_index, new_interval)
+
                     # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
-                    logging.debug("SPILL to STACK")
-                
-                for it, it_var in inactive:
-                    split_inactive = it.generateChild(current.firstUse())
-                    split_inactive_index = bisect.bisect_left(unhandled, split_inactive, key = lambda x: x[0].start)
-                    unhandled.insert(split_inactive_index, split_active)
-                    # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
-                    logging.debug("SPILL to STACK")
+                    spills[current_first_use].append(curVariable)
+                    
 
-            # Since there are no fixed intervals for any registers, we do not further process
+                else:
+                    # spill intervals that currently block reg
+                    for it, it_var in active:
+                        if it.register == candidate_register:
+                            #split_active = it.generateChild(current.firstUse())
+                            intervals, new_active, old_active = split_interval( it_var, it, current.firstUse(), intervals)
+                            split_active_index = bisect.bisect_left(unhandled, new_active, key = lambda x: x[0].start)
+                            unhandled.insert(split_active_index, new_active)
+                            # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
+                            # TODo: spil old_active
+                            spills[current_first_use].append(it_var)
 
-        
+                            old_active.register = None
+                            logging.debug("SPILL to STACK")
+                    
+                    
+                    for it, it_var in inactive:
+                        if it.register == candidate_register:
+                            #split_inactive = it.generateChild(current.firstUse())
+                            intervals, new_inactive, old_inactive = split_interval( it_var, it, current.firstUse(), intervals)
+                            split_inactive_index = bisect.bisect_left(unhandled, new_inactive, key = lambda x: x[0].start)
+                            unhandled.insert(split_inactive_index, new_active)
+                            # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
+                            # TODo: spill old_inactive
+                            spills[current_first_use].append(it_var)
+                            
+                            old_inactive.register = None
+                            logging.debug("SPILL to STACK")
+
+
+                    
+                    current.register = candidate_register
+                    currentWasAllocated = True
+
+
+                # Since there are no fixed intervals for any registers, we do not further process
+
+            # if current has a register assigned then add current to active
+            if currentWasAllocated:
+                active.add((current, curVariable))
         
         
         
