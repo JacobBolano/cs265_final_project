@@ -1,0 +1,596 @@
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', '__undefined'], 'dest': 'd_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', 'e_test_1'], 'dest': 'e_test_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', 'd_test_1'], 'dest': 'd_test_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1_L', 'e_test_1_pre'], 'dest': 'e_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1_L', 'd_test_1_pre'], 'dest': 'd_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_0'], 'dest': 'e_test_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', '__undefined'], 'dest': 'd_test_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_1', 'hoist_0'], 'dest': 'hoist_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2', 'three_0'], 'dest': 'three_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0', 'cond2_1'], 'dest': 'cond2_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0', 'two_1'], 'dest': 'two_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', '__undefined'], 'dest': 'd_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', '__undefined'], 'dest': 'd_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_1', 'hoist_0'], 'dest': 'hoist_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2', 'three_0'], 'dest': 'three_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0', 'cond2_1'], 'dest': 'cond2_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0', 'two_1'], 'dest': 'two_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', '__undefined'], 'dest': 'e_test_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'd_test_1'], 'dest': 'd_test_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', '__undefined'], 'dest': 'e_test_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'd_test_1'], 'dest': 'd_test_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', 'e_test_1'], 'dest': 'e_test_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1_L', 'e_test_1_pre'], 'dest': 'e_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', '__undefined'], 'dest': 'e_test_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'd_test_1'], 'dest': 'd_test_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', 'e_test_1'], 'dest': 'e_test_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', 'd_test_1'], 'dest': 'd_test_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1_L', 'e_test_1_pre'], 'dest': 'e_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1_L', 'd_test_1_pre'], 'dest': 'd_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', '__undefined'], 'dest': 'e_test_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'd_test_0'], 'dest': 'd_test_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_1', 'hoist_0'], 'dest': 'hoist_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2', 'three_0'], 'dest': 'three_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0', 'cond2_1'], 'dest': 'cond2_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0', 'two_1'], 'dest': 'two_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', 'd_test_1'], 'dest': 'd_test_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1_L', 'd_test_1_pre'], 'dest': 'd_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', '__undefined'], 'dest': 'd_test_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_0', 'hoist_1'], 'dest': 'hoist_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0', 'three_2'], 'dest': 'three_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_1', 'cond2_0'], 'dest': 'cond2_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_1', 'two_0'], 'dest': 'two_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', 'd_test_0'], 'dest': 'd_test_0_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['B', 'C'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0_L', 'd_test_0_pre'], 'dest': 'd_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', '__undefined'], 'dest': 'd_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_1', 'hoist_0'], 'dest': 'hoist_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2', 'three_0'], 'dest': 'three_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0', 'cond2_1'], 'dest': 'cond2_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0', 'two_1'], 'dest': 'two_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', 'e_test_0'], 'dest': 'e_test_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', 'd_test_1'], 'dest': 'd_test_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0_L', 'e_test_0_pre'], 'dest': 'e_test_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1_L', 'd_test_1_pre'], 'dest': 'd_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'e_test_1'], 'dest': 'e_test_0_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_0', '__undefined'], 'dest': 'd_test_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['D', 'E'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['hoist_1', 'hoist_0'], 'dest': 'hoist_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2', 'three_0'], 'dest': 'three_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0', 'cond2_1'], 'dest': 'cond2_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0', 'two_1'], 'dest': 'two_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_1', 'cond1_1'], 'dest': 'cond1_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_1', 'loop_var_copy_1'], 'dest': 'loop_var_copy_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1', 'one_1'], 'dest': 'one_0_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1', 'e_test_1'], 'dest': 'e_test_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1', 'd_test_1'], 'dest': 'd_test_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_2', 'loop_var_2'], 'dest': 'loop_var_1_L', 'labels': ['C', 'B'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_2'], 'dest': 'hoist_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_2'], 'dest': 'three_1_L', 'labels': ['inner'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_1_L', 'hoist_1_pre'], 'dest': 'hoist_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_1_L', 'three_1_pre'], 'dest': 'three_1', 'labels': ['C_latch', 'C_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0'], 'dest': 'hoist_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0'], 'dest': 'three_1_pre', 'labels': ['A'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['hoist_0_L', 'hoist_0_pre'], 'dest': 'hoist_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['three_0_L', 'three_0_pre'], 'dest': 'three_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond2_0_L', 'cond2_0_pre'], 'dest': 'cond2_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['two_0_L', 'two_0_pre'], 'dest': 'two_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond1_0_L', 'cond1_0_pre'], 'dest': 'cond1_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['loop_var_copy_0_L', 'loop_var_copy_0_pre'], 'dest': 'loop_var_copy_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_1_L', 'e_test_1_pre'], 'dest': 'e_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['d_test_1_L', 'd_test_1_pre'], 'dest': 'd_test_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_1_L', 'loop_var_1_pre'], 'dest': 'loop_var_1', 'labels': ['A_latch', 'A_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'hoist_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'three_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond2_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'two_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'cond1_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'loop_var_copy_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', '__undefined'], 'dest': 'one_0_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['e_test_0', '__undefined'], 'dest': 'e_test_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined', 'd_test_0'], 'dest': 'd_test_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['loop_var_0', 'loop_var_0'], 'dest': 'loop_var_1_pre', 'labels': ['E', 'D'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:{'args': ['one_1'], 'dest': 'one_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_1'], 'dest': 'cond_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_1'], 'dest': 'zero_0_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_2'], 'dest': 'i_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_2'], 'dest': 'result_1_L', 'labels': ['body'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['one_0_L', 'one_0_pre'], 'dest': 'one_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['cond_0_L', 'cond_0_pre'], 'dest': 'cond_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['zero_0_L', 'zero_0_pre'], 'dest': 'zero_0', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_1_L', 'i_1_pre'], 'dest': 'i_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_1_L', 'result_1_pre'], 'dest': 'result_1', 'labels': ['header_latch', 'header_preheader'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'one_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'cond_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'bool'}
+DEBUG:root:{'args': ['__undefined'], 'dest': 'zero_0_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['i_0'], 'dest': 'i_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:{'args': ['result_0'], 'dest': 'result_1_pre', 'labels': ['b1'], 'op': 'phi', 'type': 'int'}
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
+DEBUG:root:SPILL to STACK
