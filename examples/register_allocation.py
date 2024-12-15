@@ -168,7 +168,7 @@ def reorder_postorder(postorder, filtered_loops):
 
 # finds phi instrucitons for a specific block
 def find_phis(block_map_result):
-
+    phi_set = set()
     phi_map = {}
     for block in block_map_result:
         current_block_phis = []
@@ -176,10 +176,10 @@ def find_phis(block_map_result):
         for instruction in block_map_result[block]:
             if "op" in instruction and instruction.get('op') == 'phi':
                 current_block_phis.append(instruction)
-        
+                phi_set.add(instruction["dest"])
         phi_map[block] = current_block_phis
     
-    return phi_map
+    return phi_map, phi_set
 
 # Custom Interval Class
 class Interval:
@@ -238,7 +238,7 @@ class Interval:
         for use in temp:
             if target_time <= use:
                 return use
-        return None
+        return float('inf')
 
     def firstUse(self): # find the first use
         temp = sorted(self.uses)
@@ -276,7 +276,7 @@ def split_interval(target_operand, old_interval, free_until_pos, intervals):
             new_interval.add_range(start, end)
             ranges_to_remove.append(range)
         #VERIFY
-        elif start < free_until_pos <= end: #in this case there is an intersection
+        elif start <= free_until_pos <= end: #in this case there is an intersection
             new_interval.add_range(free_until_pos, end)
             old_interval.ranges[i] = (start, free_until_pos)
             print("debug: ", start, free_until_pos)
@@ -389,7 +389,8 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
             if operand not in intervals:
                 intervals[operand] = [Interval(1)] #VERIFY
             intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[block][1])
-            # logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
+            logging.debug(f'A: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[block][1]}')
+        logging.debug(f'Live set of {block} and {live}. block_start_end_map: {block_start_end_map}')
         
         # Process operations in reverse - go through each instruction and make sure its an operation
         for i in range(len(instructions) - 1, -1, -1):
@@ -414,7 +415,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                             intervals[input] = [Interval(1)]
                         intervals[input][0].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
                         intervals[input][0].add_use(instr_to_index[(block, i)])
-                        # logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
+                        logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
                         live.add(input)
         
         # Handle phi outputs
@@ -429,7 +430,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                 if operand not in intervals:
                     intervals[operand] = [Interval(1)]
                 intervals[operand][0].add_range(block_start_end_map[block][0], block_start_end_map[loop_end][1])
-                # logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
+                logging.debug(f'C: Adding range for {operand} {block_start_end_map[block][0]} to {block_start_end_map[loop_end][1]}')
         
         # Save liveIn for the block
         live_in[block] = live
@@ -576,7 +577,17 @@ if __name__ == "__main__":
         
         reordered_postorder = reorder_postorder(postorder, filtered_nested_loops)
 
-        phi_map = find_phis(block_map_result)
+        new_block_map_result = OrderedDict()
+        for block in reordered_postorder:
+            new_block_map_result[block] = block_map_result[block]
+        block_map_result = new_block_map_result
+        
+        
+
+
+
+    
+        phi_map, phi_set = find_phis(block_map_result)
 
         # label instructions to their index/id
         instr_to_index = {} # maps tuple (block, instruction_block_index) to overall index
@@ -603,6 +614,18 @@ if __name__ == "__main__":
         var_to_use_map = find_uses(block_map_result, instr_to_index)
 
         intervals, live_in = build_intervals(reordered_postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map)
+
+        # patching phi start values
+        for phi_interval in phi_set:
+            if phi_interval in intervals:
+                intervals[phi_interval][0].start = intervals[phi_interval][0].ranges[0][0]
+
+        for block in phi_map:
+            for phi in phi_map[block]:
+                for arg in phi["args"]:
+                    intervals[arg][0].add_use( instr_to_index[(block, 0)] )
+                    intervals[arg][0].add_range( instr_to_index[(block, 0)], instr_to_index[(block, 0)] )
+
 
         #print(reorder_postorder(postorder, filtered_nested_loops))
         # logging.debug(f'intervals: {intervals}')
@@ -661,6 +684,8 @@ if __name__ == "__main__":
 
         # throw out all intervals relating to the __undefined phi variable input:
         lifetimeIntervals = [tup for tup in lifetimeIntervals if tup[1] != "__undefined"]
+
+
 
         unhandled = sorted(lifetimeIntervals, key=lambda x: x[0].start) 
         active = set() # intervals that are active at the current position (start<= curent position <= end)
