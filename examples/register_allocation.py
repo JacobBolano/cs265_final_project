@@ -329,17 +329,33 @@ def find_uses(block_map_result, instr_to_index):
     return var_to_use_map
 
 # Update Index Mapping after spill_id's block and index
+#instr_to_index is (block, index) --> ID
+# index_to_instr is ID --> [(block, index)]
 def update_indices(instr_to_index, index_to_instr, spill_id):
-    # work on this
-        # insert at index_of_instr = 20, (block 2 index 5)
-            # helper
-                # go through keys in instr_to_index
-                # find where tuple[0] (block) == the block we just changed
-                # find where tuple[1] index is > index we just changed
-                # nowe we have a (block, i) --> id
-                # same time we update our id --> (block, i + 1)
-                # we update the key value in instr_to_index to now be (block, i + 1) --> id
-    pass
+    for desired_block, desired_index  in index_to_instr[spill_id]: 
+        # we loop but honestly this will only happens once as long as its not a phi at that index
+        remove_from_instr_to_index = set()
+        add_to_instr_to_index = set()
+        for key in instr_to_index:
+            curr_block, curr_index = key
+            if curr_block == desired_block and curr_index >= desired_index:
+                # this is a specific block and index that must be shifted
+                id_to_update = instr_to_index[(curr_block, curr_index)]
+
+                # update the current instr_to_index map to point to this id
+                add_to_instr_to_index.add((curr_block, curr_index + 1))
+                remove_from_instr_to_index.add((curr_block, curr_index))
+
+                # update blocks and indices impacted by this change at id
+                for pair in index_to_instr[id_to_update]:
+                    pair_block, pair_index = pair
+                    if pair_block == desired_block and pair_index >= desired_index:
+                        pair[1] += 1
+        for pair in remove_from_instr_to_index:
+            instr_to_index.remove(pair)
+        for pair in add_to_instr_to_index:
+            instr_to_index.add(pair)
+    return instr_to_index, index_to_instr
 
 # builds intervals based on algorithm in paper
 def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map):
@@ -370,24 +386,27 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
         for i in range(len(instructions) - 1, -1, -1):
             instruction = instructions[i]
             # conditional to check if instruction is operation
-            # Handle Outputs
-            if "dest" in instruction:
-                output = instruction["dest"]
-                if output not in intervals:
-                    intervals[output] = [Interval(1)]
+            if "op" in instruction and instruction.get('op') == 'phi':
+                continue
+            else:
+                # Handle Outputs
+                if "dest" in instruction:
+                    output = instruction["dest"]
+                    if output not in intervals:
+                        intervals[output] = [Interval(1)]
 
-                intervals[output][0].set_from(instr_to_index[(block, i)])
-                live.discard(output)
+                    intervals[output][0].set_from(instr_to_index[(block, i)])
+                    live.discard(output)
 
-            # Handle Inputs
-            if "args" in instruction:
-                for input in instruction["args"]:
-                    if input not in intervals:
-                        intervals[input] = [Interval(1)]
-                    intervals[input][0].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
-                    intervals[input][0].add_use(instr_to_index[(block, i)])
-                    # logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
-                    live.add(input)
+                # Handle Inputs
+                if "args" in instruction:
+                    for input in instruction["args"]:
+                        if input not in intervals:
+                            intervals[input] = [Interval(1)]
+                        intervals[input][0].add_range(block_start_end_map[block][0], instr_to_index[(block, i)])
+                        intervals[input][0].add_use(instr_to_index[(block, i)])
+                        # logging.debug(f'B: Adding range for {input} {block_start_end_map[block][0]} to {instr_to_index[(block, i)]}')
+                        live.add(input)
         
         # Handle phi outputs
         for phi in phi_map[block]:
