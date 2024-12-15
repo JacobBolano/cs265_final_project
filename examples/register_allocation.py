@@ -181,15 +181,16 @@ def find_phis(block_map_result):
     
     return phi_map
 
-# defines interval class
+# Custom Interval Class
 class Interval:
+
     def __init__(self, id):
         self.ranges = []  # List of (start_instruction, end_instruction)
         self.start = None  # First point where the variable is live
-        self.register = None
-        self.interval_id = id
-        self.uses = set()
-        self.end = None
+        self.register = None # Register ID for this Interval
+        self.interval_id = id # Interval Object Id for a specific Operand
+        self.uses = set() # List of uses of the target Operand
+        self.end = None # Last point where the variable is live in this Interval
 
     def add_use(self, use_time):
         self.uses.add(use_time)
@@ -249,7 +250,7 @@ def earliestIntersection(source_interval, target_interval):
     for range in source_interval.ranges:
         source_start, source_end = range
 
-        for t_range in source_interval.ranges:
+        for t_range in target_interval.ranges:
             target_start, target_end = t_range
 
             if source_start <= target_start <= source_end: # if our start is within source
@@ -278,6 +279,7 @@ def split_interval(target_operand, old_interval, free_until_pos, intervals):
 
     # we set the Start of the interval, cutting the first range copied over
     new_interval.set_from(free_until_pos)
+    new_interval.set_from(new_interval.ranges[0][0])
 
     # we fix the previous interval to no longer include the ranges that got added over
     for range in ranges_to_remove:
@@ -325,6 +327,19 @@ def find_uses(block_map_result, instr_to_index):
                     
                     var_to_use_map[arg].add(overall_index)
     return var_to_use_map
+
+# Update Index Mapping after spill_id's block and index
+def update_indices(instr_to_index, index_to_instr, spill_id):
+    # work on this
+        # insert at index_of_instr = 20, (block 2 index 5)
+            # helper
+                # go through keys in instr_to_index
+                # find where tuple[0] (block) == the block we just changed
+                # find where tuple[1] index is > index we just changed
+                # nowe we have a (block, i) --> id
+                # same time we update our id --> (block, i + 1)
+                # we update the key value in instr_to_index to now be (block, i + 1) --> id
+    pass
 
 # builds intervals based on algorithm in paper
 def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index, block_start_end_map, header_to_latch_map, var_to_use_map):
@@ -537,6 +552,7 @@ if __name__ == "__main__":
 
         # label instructions to their index/id
         instr_to_index = {} # maps tuple (block, instruction_block_index) to overall index
+        index_to_instr = {}
         block_start_end_map = {} # maps block to tuple (index of starting instruction, index of ending instruction)
         index_of_instr = 2
         for block in block_map_result:
@@ -544,6 +560,10 @@ if __name__ == "__main__":
             # go through each instruction in our map
             for i in range(len(block_map_result[block])):
                 instr_to_index[(block, i)] = index_of_instr
+                if index_of_instr in index_to_instr:
+                    index_to_instr[index_of_instr].append((block, i))
+                else:
+                    index_to_instr[index_of_instr] = [(block, i)]
                 if i + 1 < len(block_map_result[block]) and "op" in block_map_result[block][i+1] and block_map_result[block][i+1].get('op') == 'phi':
                     # we dont change the index of phis if the next instruciton is also a phi instruction
                     continue
@@ -592,7 +612,7 @@ if __name__ == "__main__":
         #       sorted by start time
         lifetimeIntervals = [(val, key) for (key, val) in intervals.items()]
         # 2. we have a dictionary of uses where the the variable/register is the key and the value is a list of uses sorted in increasing order [line1, line2, ...]
-        var_to_use_map = {}
+        # var_to_use_map = {}
         # 3. we have the proper block order from before. This should be reordered_postorder (from lifetime ranges branch)
         reordered_postorder = reordered_postorder
         #
@@ -667,8 +687,8 @@ if __name__ == "__main__":
                 currentWasAllocated = True
 
                 # split_child = current.generateChild(freeUntilPos[candidate_register])
-                split_child_index = bisect.bisect_left(unhandled, new_interval, key = lambda x: x[0].start)
-                unhandled.insert(split_child_index, new_interval)
+                split_child_index = bisect.bisect_left(unhandled, (new_interval, curVariable), key = lambda x: x[0].start)
+                unhandled.insert(split_child_index, (new_interval, curVariable))
 
 
             ######################
@@ -690,10 +710,10 @@ if __name__ == "__main__":
                     # so it is best to spill current itself
 
                     # split_child = current.generateChild(current.firstUse())
-                    intervals, new_interval, current = split_interval( curVariable, current, current_first_use, intervals)
+                    intervals, new_interval, current = split_interval( curVariable, current, current_first_use, intervals) # lookout for index to split
 
-                    split_child_index = bisect.bisect_left(unhandled, new_interval, key = lambda x: x[0].start)
-                    unhandled.insert(split_child_index, new_interval)
+                    split_child_index = bisect.bisect_left(unhandled, (new_interval, curVariable), key = lambda x: x[0].start)
+                    unhandled.insert(split_child_index, (new_interval, curVariable))
 
                     # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
                     spills[current_first_use].append(curVariable)
@@ -701,12 +721,20 @@ if __name__ == "__main__":
 
                 else:
                     # spill intervals that currently block reg
+
+                    add_to_active = set()
+                    remove_from_active = set()
+                    add_to_inactive = set()
+                    remove_from_inactive = set()
+
                     for it, it_var in active:
                         if it.register == candidate_register:
                             #split_active = it.generateChild(current.firstUse())
                             intervals, new_active, old_active = split_interval( it_var, it, current.firstUse(), intervals)
-                            split_active_index = bisect.bisect_left(unhandled, new_active, key = lambda x: x[0].start)
-                            unhandled.insert(split_active_index, new_active)
+                            add_to_active.add((old_active, it_var))
+                            remove_from_active.add((it, it_var))
+                            split_active_index = bisect.bisect_left(unhandled, (new_active, it_var), key = lambda x: x[0].start)
+                            unhandled.insert(split_active_index, (new_active, it_var))
                             # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
                             # TODo: spil old_active
                             spills[current_first_use].append(it_var)
@@ -714,13 +742,15 @@ if __name__ == "__main__":
                             old_active.register = None
                             logging.debug("SPILL to STACK")
                     
-                    
+
                     for it, it_var in inactive:
                         if it.register == candidate_register:
                             #split_inactive = it.generateChild(current.firstUse())
                             intervals, new_inactive, old_inactive = split_interval( it_var, it, current.firstUse(), intervals)
-                            split_inactive_index = bisect.bisect_left(unhandled, new_inactive, key = lambda x: x[0].start)
-                            unhandled.insert(split_inactive_index, new_active)
+                            add_to_inactive.add((it_var, old_inactive))
+                            remove_from_inactive.add((it_var, it))
+                            split_inactive_index = bisect.bisect_left(unhandled, (new_inactive, it_var), key = lambda x: x[0].start)
+                            unhandled.insert(split_inactive_index, (new_inactive, it_var))
                             # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
                             # TODo: spill old_inactive
                             spills[current_first_use].append(it_var)
@@ -728,6 +758,15 @@ if __name__ == "__main__":
                             old_inactive.register = None
                             logging.debug("SPILL to STACK")
 
+                    # fix inactive and active
+                    for pair in add_to_active:
+                        active.add(pair)
+                    for pair in remove_from_active:
+                        active.remove(pair)
+                    for pair in add_to_inactive:
+                        inactive.add(pair)
+                    for pair in remove_from_inactive:
+                        inactive.remove(pair)
 
                     
                     current.register = candidate_register
