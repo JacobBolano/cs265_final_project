@@ -1,6 +1,7 @@
 @main {
   result: int = const 1;
-  i: int = const 0;
+  ai: int = const 10;
+  i: int = const 10;
 
 .header:
   zero: int = const 0;
