@@ -621,10 +621,13 @@ if __name__ == "__main__":
                 intervals[phi_interval][0].start = intervals[phi_interval][0].ranges[0][0]
 
         for block in phi_map:
+            decimal_addon = 0 # for now we assume that a phi will take less than 10000 values
             for phi in phi_map[block]:
                 for arg in phi["args"]:
-                    intervals[arg][0].add_use( instr_to_index[(block, 0)] )
-                    intervals[arg][0].add_range( instr_to_index[(block, 0)], instr_to_index[(block, 0)] )
+                    intervals[arg][0].add_use( instr_to_index[(block, 0)] + decimal_addon)
+                    
+                    intervals[arg][0].add_range( instr_to_index[(block, 0)], instr_to_index[(block, 0)] + decimal_addon )
+                    decimal_addon += 0.1
 
 
         #print(reorder_postorder(postorder, filtered_nested_loops))
@@ -789,6 +792,10 @@ if __name__ == "__main__":
                 
                 candidate_register = nextUsePos.index(max(nextUsePos)) # register with highest nextUsePos
             
+                # check if there are no more uses ahead(linearly)
+                if len(current.uses) == 0:
+                    continue
+                
                 current_first_use = current.firstUse()
                 if current_first_use > nextUsePos[candidate_register]:
                     # all other intervals are used before current is used
