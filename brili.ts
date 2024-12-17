@@ -1,7 +1,7 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
-const numRegisters = 10
+const numRegisters = 5
 class ListNode {
   constructor(key, value) {
       this.key = key;
@@ -203,6 +203,7 @@ const argCounts: {[key in bril.OpCode]: number | null} = {
   cge: 2,
   char2int: 1,
   int2char: 1,
+  STACK: 1,
 };
 
 type Pointer = {
@@ -536,6 +537,9 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
   case "const":
     // Interpret JSON numbers as either ints or floats.
     let value: Value;
+    if (instr.dest.includes("STACK")) {
+      state.numStackSpills += BigInt(1);
+    }
     if (typeof instr.value === "number") {
       if (instr.type === "float")
         value = instr.value;
@@ -553,10 +557,7 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
   case "id": {
     let val = getArgument(instr, state.env, 0);
-    // console.log("instr: ", instr, " state.env: ",state.env,"  argPos: ", 0, " val: ", val);
-    if (instr.dest.includes("STACK")) {
-      state.numStackSpills += BigInt(1);
-    }
+    // // console.log("instr: ", instr, " state.env: ",state.env,"  argPos: ", 0, " val: ", val);
     state.env.set(instr.dest, val);
     return NEXT;
   }

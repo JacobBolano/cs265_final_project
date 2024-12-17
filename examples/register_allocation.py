@@ -279,12 +279,8 @@ def split_interval(target_operand, old_interval, free_until_pos, intervals):
         elif start <= free_until_pos <= end: #in this case there is an intersection
             new_interval.add_range(free_until_pos, end)
             old_interval.ranges[i] = (start, free_until_pos)
-            print("debug: ", start, free_until_pos)
+            #print("debug: ", start, free_until_pos)
 
-    # we set the Start of the interval, cutting the first range copied over
-    print(new_interval.ranges)
-    new_interval.set_from(free_until_pos)
-    new_interval.set_from(new_interval.ranges[0][0])
 
     # we fix the previous interval to no longer include the ranges that got added over
     
@@ -294,22 +290,35 @@ def split_interval(target_operand, old_interval, free_until_pos, intervals):
     # update the end of our old interval (new interval updated dynamically)
     old_interval.end = sorted(old_interval.ranges)[-1][1]
 
-    # update the end of our new interval (new interval updated dynamically)
-    new_interval.end = sorted(new_interval.ranges)[-1][1]
+    
 
     # we fix the uses that come after the time
     for use in old_interval.uses:
         if use >= free_until_pos:
             new_interval.add_use(use)
-    for use in new_interval.uses:
-        old_interval.uses.remove(use)
+
+    
     
     # add the new interval to the map and edit the old interval
     for i, interval in enumerate(intervals[target_operand]):
         if interval.interval_id == old_interval.interval_id:
             intervals[target_operand][i] = old_interval
             break
-    intervals[target_operand].append(new_interval)
+    
+    
+    # we set the Start of the interval, cutting the first range copied over
+    # print(new_interval.ranges)
+    new_interval.set_from(free_until_pos)
+    if new_interval.ranges != []:
+        new_interval.set_from(new_interval.ranges[0][0])
+        new_interval.start = new_interval.ranges[0][0]
+        # update the end of our new interval (new interval updated dynamically)
+        new_interval.end = sorted(new_interval.ranges)[-1][1]
+        for use in new_interval.uses:
+            old_interval.uses.remove(use)
+        intervals[target_operand].append(new_interval)
+    else: new_interval = -1
+
     return intervals, new_interval, old_interval
 
 
@@ -406,6 +415,7 @@ def build_intervals(postorder, succs, phi_map, block_map_result, instr_to_index,
                         intervals[output] = [Interval(1)]
 
                     intervals[output][0].set_from(instr_to_index[(block, i)])
+                    intervals[output][0].add_use(instr_to_index[(block, i)]+1)
                     live.discard(output)
 
                 # Handle Inputs
@@ -452,6 +462,8 @@ if __name__ == "__main__":
         if "args" in fn:
             function_args = fn["args"]
 
+        # types for each variable in the function
+        types = get_types(fn)
 
         # create a map block_map_result that maps label to block of code
         blocks = list(form_blocks(fn['instrs']))
@@ -620,14 +632,21 @@ if __name__ == "__main__":
             if phi_interval in intervals:
                 intervals[phi_interval][0].start = intervals[phi_interval][0].ranges[0][0]
 
-        for block in phi_map:
-            decimal_addon = 0 # for now we assume that a phi will take less than 10000 values
-            for phi in phi_map[block]:
-                for arg in phi["args"]:
-                    intervals[arg][0].add_use( instr_to_index[(block, 0)] + decimal_addon)
+        # patching function argument values
+        for f_arg in function_args:
+            if f_arg['name'] in intervals:
+                
+                intervals[f_arg['name']][0].start = 0
+        
+
+        # for block in phi_map:
+        #     decimal_addon = 0 # for now we assume that a phi will take less than 10000 values
+        #     for phi in phi_map[block]:
+        #         for arg in phi["args"]:
+        #             intervals[arg][0].add_use( instr_to_index[(block, 0)] + decimal_addon)
                     
-                    intervals[arg][0].add_range( instr_to_index[(block, 0)], instr_to_index[(block, 0)] + decimal_addon )
-                    decimal_addon += 0.1
+        #             intervals[arg][0].add_range( instr_to_index[(block, 0)], instr_to_index[(block, 0)] + decimal_addon )
+        #             decimal_addon += 0.1
 
 
         #print(reorder_postorder(postorder, filtered_nested_loops))
@@ -670,7 +689,7 @@ if __name__ == "__main__":
         # var_to_use_map = {}
         # 3. we have the proper block order from before. This should be reordered_postorder (from lifetime ranges branch)
         reordered_postorder = reordered_postorder
-        print(reordered_postorder)
+        #print(reordered_postorder)
         #
         # 4. Number of physical registers We assume that we have at least as many registers as the maximum arguments in an instruction (ideally this is 3 or 1+maxnum fo phi instructions)
         numRegisters= args.numRegisters
@@ -695,9 +714,9 @@ if __name__ == "__main__":
         inactive = set() # intervals that are inactive at the current position (start<= curent position <= end)
         handled = set() # intervals that are handled at the current position
 
-        print("unhandled: ")
-        for qwert, qwertV in unhandled:
-                print(qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses]) + ". Start: ", qwert.start) 
+        #print("unhandled: ")
+        #for qwert, qwertV in unhandled:
+                #print(qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses]) + ". Start: ", qwert.start) 
 
         while unhandled:
             current, curVariable = unhandled.pop(0)
@@ -705,9 +724,9 @@ if __name__ == "__main__":
             if current.ranges == []: continue
             position = current.start
             
-            print("position", position, current, curVariable, current.ranges, current.uses)
-            for qwert, qwertV in unhandled:
-                print(qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses]) ) 
+            # print("position", position, current, curVariable, current.ranges, current.uses)
+            # for qwert, qwertV in unhandled:
+            #     print(qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses])+ " . Start: "+str(qwert.start) ) 
                 
             
             
@@ -760,7 +779,7 @@ if __name__ == "__main__":
                 # register available for the whole interval
                 current.register = candidate_register
                 currentWasAllocated = True
-                print("TERMINAL: WHOLE INSERTION AT REGISTER: ", candidate_register)
+                #print("TERMINAL: WHOLE INSERTION AT REGISTER: ", candidate_register)
             else:
                                
                 # def split_interval(target_operand, old_interval, free_until_pos, intervals):
@@ -776,7 +795,7 @@ if __name__ == "__main__":
                 # unhandled.insert(split_child_index, (new_interval, curVariable))
                 unhandled.append((new_interval, curVariable))
                 unhandled.sort(key = lambda x : x[0].start)
-                print("TERMINAL: PARTIAL INSERTION AT REGISTER: ", candidate_register, " UNTIL ", freeUntilPos[candidate_register])
+                #print("TERMINAL: PARTIAL INSERTION AT REGISTER: ", candidate_register, " UNTIL ", freeUntilPos[candidate_register])
 
 
             ######################
@@ -789,7 +808,6 @@ if __name__ == "__main__":
                     nextUsePos[it.register] = min(it.nextUseAfter(current.start), nextUsePos[it.register])
                 for it, it_var in inactive:
                     nextUsePos[it.register] = min(it.nextUseAfter(current.start), nextUsePos[it.register])
-                
                 candidate_register = nextUsePos.index(max(nextUsePos)) # register with highest nextUsePos
             
                 # check if there are no more uses ahead(linearly)
@@ -797,6 +815,8 @@ if __name__ == "__main__":
                     continue
                 
                 current_first_use = current.firstUse()
+                # print(nextUsePos)
+                # print(current_first_use, nextUsePos[candidate_register])
                 if current_first_use > nextUsePos[candidate_register]:
                     # all other intervals are used before current is used
                     # so it is best to spill current itself
@@ -804,7 +824,7 @@ if __name__ == "__main__":
                     
                     
                     # split_child = current.generateChild(current.firstUse())
-                    print("DEBUG self spill: ", curVariable, current_first_use)
+                    # print("DEBUG self spill: ", curVariable, current_first_use)
                     intervals, new_interval, current = split_interval( curVariable, current, current_first_use, intervals) # lookout for index to split
 
                     # split_child_index = bisect.bisect_left(unhandled, (new_interval, curVariable), key = lambda x: x[0].start)
@@ -813,8 +833,8 @@ if __name__ == "__main__":
                     unhandled.sort(key= lambda x : x[0].start)
 
                     # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
-                    #spills[current_first_use].append(curVariable) maybe we shouldnt do this doesnt make sense
-                    print("TERMINAL splitting self: ", curVariable, current.ranges)
+                    # spills[current_first_use].append(curVariable) #maybe we shouldnt do this doesnt make sense
+                    #print("TERMINAL splitting self: ", curVariable, current.ranges)
                     
                     
 
@@ -829,43 +849,45 @@ if __name__ == "__main__":
                     for it, it_var in active:
                         if it.register == candidate_register:
                             #split_active = it.generateChild(current.firstUse())
-                            print("DEBUG active spill: ", it_var, it.ranges, current_first_use)
+                            # print("DEBUG active spill: ", it_var, it.ranges, current_first_use, it.uses)
                             intervals, new_active, old_active = split_interval( it_var, it, current_first_use, intervals)
                             old_active.register = candidate_register
                             add_to_active.add((old_active, it_var))
                             remove_from_active.add((it, it_var))
                             # split_active_index = bisect.bisect_left(unhandled, (new_active, it_var), key = lambda x: x[0].start)
                             # unhandled.insert(split_active_index, (new_active, it_var))
-                            unhandled.append((new_active, it_var))
-                            unhandled.sort(key= lambda x : x[0].start)
+                            if new_active != -1:
+                                unhandled.append((new_active, it_var))
+                                unhandled.sort(key= lambda x : x[0].start)
                             # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
                             # TODo: spil old_active
                             spills[current_first_use].append(it_var)
 
                             old_active.register = None
                             logging.debug("SPILL to STACK")
-                            print("spilling: ", it_var, new_active.ranges)
+                            #print("spilling: ", it_var, new_active.ranges)
                     
 
                     for it, it_var in inactive:
                         if it.register == candidate_register:
                             #split_inactive = it.generateChild(current.firstUse())
-                            print("DEBUG inactive spill: ", it_var, it.ranges, current_first_use)
+                            # print("DEBUG inactive spill: ", it_var, it.ranges, current_first_use)
                             intervals, new_inactive, old_inactive = split_interval( it_var, it, current_first_use, intervals)
                             old_inactive.register = candidate_register
                             add_to_inactive.add((it_var, old_inactive))
                             remove_from_inactive.add((it_var, it))
                             # split_inactive_index = bisect.bisect_left(unhandled, (new_inactive, it_var), key = lambda x: x[0].start)
                             # unhandled.insert(split_inactive_index, (new_inactive, it_var))
-                            unhandled.append((new_inactive, it_var))
-                            unhandled.sort(key= lambda x : x[0].start)
+                            if new_inactive != -1:
+                                unhandled.append((new_inactive, it_var))
+                                unhandled.sort(key= lambda x : x[0].start)
                             # TODO: create a BRIL instruction like 'stack = id var' that represents a spill
                             # TODo: spill old_inactive
                             spills[current_first_use].append(it_var)
                             
                             old_inactive.register = None
                             logging.debug("SPILL to STACK")
-                            print("spilling: ", it_var, new_inactive.ranges)
+                            #print("spilling: ", it_var, new_inactive.ranges)
 
                     # fix inactive and active
                     for pair in add_to_active:
@@ -880,7 +902,7 @@ if __name__ == "__main__":
                     
                     current.register = candidate_register
                     currentWasAllocated = True
-                    print("TERMINAL: many previous removed: ", "Aftermath Unhandled: ", ', '.join([qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses]) for qwert, qwertV in unhandled]))
+                    #print("TERMINAL: many previous removed: ", "Aftermath Unhandled: ", ', '.join([qwertV+": "+", ".join([f"[{s}, {e}]" for s, e in qwert.ranges]) + ". Uses: "+ ", ".join([str(u) for u in qwert.uses]) for qwert, qwertV in unhandled]))
                     
 
 
@@ -890,6 +912,25 @@ if __name__ == "__main__":
             if currentWasAllocated:
                 active.add((current, curVariable))
         
+        
+        
+        # Adding stack spill instructions:
+        spills_list = []
+        for key, val in spills.items():
+            spills_list.append( (key,val) )
+        spills_list.sort(key=lambda x : x[0], reverse=True)
+        
+        for instr_id, list_of_var_spills in spills_list:
+            for var_spill in reversed(list_of_var_spills):
+                if instr_id %2== 1:
+                    instr_id -= 1
+                block, index = index_to_instr[instr_id][0]
+                new_instruction = {}
+                new_instruction["op"] = "const"
+                new_instruction["type"] = "int"
+                new_instruction["value"] = 0
+                new_instruction["dest"] = "STACK"+types[var_spill]
+                block_map_result[block].insert(index, new_instruction)
         
         
         
