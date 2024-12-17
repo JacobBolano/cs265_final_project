@@ -1,0 +1,11 @@
+extract = 'total_dyn_naive_spills: (\d+)'
+benchmarks = '../benchmarks/core/*.bril'
+
+
+[runs.total_dyn_naive_spills]
+pipeline = [
+    "bril2json",
+    "python personal_ssa.py",
+    "python new_loop_normalization.py",
+    "brili -p {args}",
+]

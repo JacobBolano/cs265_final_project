@@ -1,6 +1,64 @@
 import * as bril from './bril-ts/bril.ts';
 import {readStdin, unreachable} from './bril-ts/util.ts';
 
+const numRegisters = 5
+class ListNode {
+  constructor(key, value) {
+      this.key = key;
+      this.value = value;
+      this.prev = null;
+      this.next = null;
+  }
+}
+class LRUCache {
+  constructor(capacity) {
+      this.capacity = capacity;
+      this.cache = new Map();
+      this.head = new ListNode(null, null);
+      this.tail = new ListNode(null, null);
+      this.head.next = this.tail;
+      this.tail.prev = this.head;
+  }
+  _remove(node) {
+      let prev = node.prev;
+      let next = node.next;
+      prev.next = next;
+      next.prev = prev;
+  }
+  _add(node) {
+      let next = this.head.next;
+      this.head.next = node;
+      node.prev = this.head;
+      node.next = next;
+      next.prev = node;
+  }
+  get(key) {
+      if (!this.cache.has(key)) {
+          return -1;
+      }
+      let node = this.cache.get(key);
+      this._remove(node);
+      this._add(node);
+      return node.value;
+  }
+  put(key, value) {
+      if (this.cache.has(key)) {
+          this._remove(this.cache.get(key));
+      }
+      let newNode = new ListNode(key, value);
+      this._add(newNode);
+      this.cache.set(key, newNode);
+      if (this.cache.size > this.capacity) {
+          let lru = this.tail.prev;
+          this._remove(lru);
+          this.cache.delete(lru.key);
+      }
+  }
+  size() {
+    return this.capacity;
+  }
+}
+
 /**
  * An interpreter error to print to the console.
  */
@@ -145,6 +203,7 @@ const argCounts: {[key in bril.OpCode]: number | null} = {
   cge: 2,
   char2int: 1,
   int2char: 1,
+  STACK: 1,
 };
 
 type Pointer = {
@@ -322,6 +381,14 @@ type State = {
 
   // For speculation: the state at the point where speculation began.
   specparent: State | null,
+
+  // For tracking the number of stack spills that occur
+  numStackSpills: bigint,
+
+  naiveRegisters: LRUCache,  // Array of strings for the naive registers
+
+  // For tracking the number of NAIVE stack spills that occur
+  numNaiveSpills: bigint
 }
 
 /**
@@ -366,9 +433,15 @@ function evalCall(instr: bril.Operation, state: State): Action {
     lastlabel: null,
     curlabel: null,
     specparent: null,  // Speculation not allowed.
+    numStackSpills: state.numStackSpills,
+    naiveRegisters: state.naiveRegisters,
+    numNaiveSpills: state.numNaiveSpills
   }
   let retVal = evalFunc(func, newState);
   state.icount = newState.icount;
+  state.numStackSpills = newState.numStackSpills;
+  state.naiveRegisters = newState.naiveRegisters;
+  state.numNaiveSpills = newState.numNaiveSpills;
 
   // Dynamically check the function's return value and type.
   if (!('dest' in instr)) {  // `instr` is an `EffectOperation`.
@@ -430,10 +503,43 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
     throw error(`${instr.op} not allowed during speculation`);
   }
 
+
+  // console.log(instr)
+  // console.log("args"  in instr)
+  // console.log("dest"  in instr)
+
+  if ("args" in instr){
+    for(let arg in instr.args){
+      if (state.naiveRegisters.get(arg) == -1){
+        if (state.naiveRegisters.size()){
+          state.numNaiveSpills += BigInt(1);
+        }
+        state.naiveRegisters.put( arg,arg )
+      }
+    }
+
+  }
+  if ("dest" in instr){
+      let dest = instr.dest;
+      if (state.naiveRegisters.get(dest) == -1){
+        if (state.naiveRegisters.size()){
+          state.numNaiveSpills += BigInt(1);
+        }
+        state.naiveRegisters.put( dest,dest )
+      }
+    
+
+  }
+
+
+
   switch (instr.op) {
   case "const":
     // Interpret JSON numbers as either ints or floats.
     let value: Value;
+    if (instr.dest.includes("STACK")) {
+      state.numStackSpills += BigInt(1);
+    }
     if (typeof instr.value === "number") {
       if (instr.type === "float")
         value = instr.value;
@@ -451,6 +557,7 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
   case "id": {
     let val = getArgument(instr, state.env, 0);
+    // // console.log("instr: ", instr, " state.env: ",state.env,"  argPos: ", 0, " val: ", val);
     state.env.set(instr.dest, val);
     return NEXT;
   }
@@ -777,6 +884,7 @@ function evalInstr(instr: bril.Instruction, state: State): Action {
 
 function evalFunc(func: bril.Function, state: State): Value | null {
   for (let i = 0; i < func.instrs.length; ++i) {
+    
     let line = func.instrs[i];
     if ('op' in line) {
       // Run an instruction.
@@ -946,6 +1054,9 @@ function evalProg(prog: bril.Program) {
     lastlabel: null,
     curlabel: null,
     specparent: null,
+    numStackSpills: BigInt(0),
+    naiveRegisters: new LRUCache(numRegisters),
+    numNaiveSpills: BigInt(0),
   }
   evalFunc(main, state);
 
@@ -955,6 +1066,8 @@ function evalProg(prog: bril.Program) {
 
   if (profiling) {
     console.error(`total_dyn_inst: ${state.icount}`);
+    console.error(`total_dyn_stack_spills: ${state.numStackSpills}`);
+    console.error(`total_dyn_naive_spills: ${state.numNaiveSpills}`);
   }
 
 }

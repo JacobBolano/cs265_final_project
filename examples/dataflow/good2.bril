@@ -1,8 +1,7 @@
 @main {
   result: int = const 1;
-  i: int = const 0;
-  a: int = add b c;
-  d: int = add b c;
+  ai: int = const 10;
+  i: int = id ai;
 
 .header:
   zero: int = const 0;
